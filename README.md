@@ -4,6 +4,20 @@ This repository reproduces an issue in .Net 8 RC1 demonstrating the source-gener
 
 SDK version: 8.0.100-rc.1.23463.5
 
+With default usage, the generator produces the following errors:
+* Missing usings for `Microsoft.Extensions.Options`
+  * Easily worked around by adding `Microsoft.Extensions.Options` to implicit global usings in the csproj.
+  * ```
+    <ItemGroup>
+      <Using Include="Microsoft.Extensions.Options" />
+    </ItemGroup>
+    ```
+* Invalid source produced. See [BindingExtensions.g.cs](./ConfigBinderGeneratorRepro/Generated/net8.0/Microsoft.Extensions.Configuration.Binder.SourceGeneration/Microsoft.Extensions.Configuration.Binder.SourceGeneration.ConfigurationBindingGenerator/BindingExtensions.g.cs) line 57.
+  * ```
+    // Missing comma near the end of the line 👉 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------> 👇
+    return services.AddSingleton<Microsoft.Extensions.Options.IConfigureOptions<TOptions>>(new Microsoft.Extensions.Options.ConfigureNamedOptions<TOptions>(name, obj => BindCoreMain(configuration, obj, typeof(TOptions)configureOptions)));
+    ```
+
 # Build Errors
 
 ```
@@ -31,12 +45,3 @@ gBinderGeneratorRepro.csproj]
 
 Time Elapsed 00:00:01.21
 ```
-
-With default usage, the generator produces the following errors:
-* Missing usings for `Microsoft.Extensions.Options`
-  * Easily worked around by adding `Microsoft.Extensions.Options` to implicit global usings with an `ItemGroup` in the csproj.
-* Invalid source produced. See [BindingExtensions.g.cs](./ConfigBinderGeneratorRepro/Generated/net8.0/Microsoft.Extensions.Configuration.Binder.SourceGeneration/Microsoft.Extensions.Configuration.Binder.SourceGeneration.ConfigurationBindingGenerator/BindingExtensions.g.cs)
-  * ```
-    // Missing comma near the end of the line 👉 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------> 👇
-    return services.AddSingleton<Microsoft.Extensions.Options.IConfigureOptions<TOptions>>(new Microsoft.Extensions.Options.ConfigureNamedOptions<TOptions>(name, obj => BindCoreMain(configuration, obj, typeof(TOptions)configureOptions)));
-    ```
