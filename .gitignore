@@ -3,6 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# Jetbrains project files
+.idea/
+
 # dotenv files
 .env
 
