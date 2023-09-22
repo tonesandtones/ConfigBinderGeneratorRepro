@@ -2,7 +2,8 @@
 
 This repository reproduces an issue in .Net 8 RC1 demonstrating the source-generated ASP.Net Configuration binder generates uncompilable code.
 
-SDK version: 8.0.100-rc.1.23463.5
+OS: Windows 10 22H2
+Dotnet SDK version: 8.0.100-rc.1.23463.5
 
 With default usage, the generator produces the following errors:
 * Missing usings for `Microsoft.Extensions.Options`
@@ -21,6 +22,10 @@ With default usage, the generator produces the following errors:
 # Build Errors
 
 ```
+> dotnet --list-sdks
+**snip various pre-8 SDK versions**
+8.0.100-rc.1.23463.5 [C:\Program Files\dotnet\sdk]
+
 > dotnet build
 MSBuild version 17.8.0-preview-23418-03+0125fc9fb for .NET
   Determining projects to restore...
